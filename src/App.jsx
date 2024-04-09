@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import DisplayCard from "./components/DisplayCard";
-import AddEmployeeModal from "./components/AddEmployeeModal";
+import NewEmployeeModal from "./components/NewEmployeeModal";
 
 function App() {
   const [show, setShow] = useState(false);
@@ -25,7 +25,7 @@ function App() {
             <Button variant="primary" size="lg" onClick={handleShow}>
               + Create
             </Button>
-            <AddEmployeeModal show={show} handleClose={handleClose} />
+            <NewEmployeeModal show={show} handleClose={handleClose} />
           </div>
         </div>
         <DisplayCard />

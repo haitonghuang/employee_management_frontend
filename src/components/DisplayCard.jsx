@@ -1,7 +1,6 @@
-import React from "react";
 import Button from "react-bootstrap/Button";
 
-function DisplayCard(props) {
+function DisplayCard() {
   return (
     <div className="w-full border-l-4 border-indigo-500 divide-y divide-slate-700">
       <div className="grid grid-cols-6 grid-flow-col space-x-4 justify-center items-center">
