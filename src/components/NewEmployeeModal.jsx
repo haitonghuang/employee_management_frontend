@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-export default function NewEmployeeModal({ show, handleClose }) {
+export default function NewEmployeeModal({ show, handleClose, handleOnSave }) {
 	return (
 		<div>
 			{" "}
@@ -45,7 +45,9 @@ export default function NewEmployeeModal({ show, handleClose }) {
 					<Button variant="secondary" onClick={handleClose}>
 						Close
 					</Button>
-					<Button variant="primary">Understood</Button>
+					<Button variant="primary" onClick={handleOnSave}>
+						Save
+					</Button>
 				</Modal.Footer>
 			</Modal>
 		</div>
