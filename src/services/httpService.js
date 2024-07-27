@@ -1,5 +1,6 @@
 import axios from "axios";
-const httpService = axios.create({
+
+const http = axios.create({
   baseURL: "http://localhost:8080",
   withCredentials: true,
   headers: {
@@ -7,5 +8,4 @@ const httpService = axios.create({
     "Content-Type": "application/json",
   },
 });
-
-export default httpService;
+export default http;

@@ -1,5 +1,10 @@
 import httpService from "./httpService";
 
-export const addNewEmployee = async (employee) => {
-  const response = await httpService.post("/create", employee);
-};
+export function getAllEmployee() {
+  const employeeList = httpService.get("/employees");
+  return employeeList;
+}
+
+export function addNewEmployee(employee) {
+  return httpService.post("/create", employee);
+}
