@@ -8,3 +8,7 @@ export function getAllEmployee() {
 export function addNewEmployee(employee) {
   return httpService.post("/create", employee);
 }
+
+export function deleteEmployee(id) {
+  return httpService.delete(`/employees/${id}`);
+}
