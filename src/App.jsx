@@ -9,6 +9,8 @@ import { useFetchAllEmployee } from "./hooks/useFetchAllEmployee";
 import Spinner from "react-bootstrap/Spinner";
 import { addNewEmployee } from "./services/employeeService";
 import SubmissionResultModal from "./components/SubmissionResultModal";
+import ConfirmationModal from "./components/ConfirmationModal";
+import { deleteEmployee } from "./services/employeeService";
 function App() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -22,8 +24,11 @@ function App() {
   const { employeeList, isLoading, getAllEmployeeData } = useFetchAllEmployee();
   const [employees, setEmployees] = useState([]);
 
+  const [isRemoved, setRemoved] = useState(false);
+
   useEffect(() => {
-    if (employeeList) {
+    console.log("hihi");
+    if (employeeList.length) {
       setEmployees(employeeList);
     } else {
       setEmployees([]);
@@ -48,6 +53,26 @@ function App() {
       setModalDescription("Error occurs. Please try again.");
       setShow(false);
     }
+  };
+
+  const handleOnDelete = async () => {
+    console.log(
+      "%cemployee id:",
+      "color:blue;font-size:15px;",
+      selectedEmployeeId
+    );
+    try {
+      await deleteEmployee(selectedEmployeeId);
+      setRemoved(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(0);
+  const openDeleteModal = (data) => {
+    console.log(data);
+    setRemoved(data.isShowDeleteModal);
+    setSelectedEmployeeId(data.employeeId);
   };
 
   return (
@@ -96,12 +121,18 @@ function App() {
                     title={employee.title}
                     email={employee.email}
                     mobile={employee.phoneNumber}
+                    setDeleteModal={openDeleteModal}
                   />
                 ))
               )}
             </div>
           )}
         </div>
+        <ConfirmationModal
+          isShow={isRemoved}
+          handleOnCancel={() => setRemoved(false)}
+          handleOnDelete={handleOnDelete}
+        />
       </div>
     </>
   );

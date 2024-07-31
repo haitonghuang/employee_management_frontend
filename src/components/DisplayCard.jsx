@@ -10,17 +10,22 @@ function DisplayCard({
   title,
   email,
   mobile,
+  // isShowDeleteModal,
+  setDeleteModal,
 }) {
-  const [isRemoved, setRemoved] = useState(false);
+  // const [isRemoved, setRemoved] = useState(false);
 
-  const handleOnDelete = async () => {
-    console.log("%cemployee id:", "color:blue;font-size:15px;", employeeId);
-    try {
-      await deleteEmployee(employeeId);
-      setRemoved(false);
-    } catch (err) {
-      console.log(err);
-    }
+  // const handleOnDelete = async () => {
+  //   console.log("%cemployee id:", "color:blue;font-size:15px;", employeeId);
+  //   try {
+  //     await deleteEmployee(employeeId);
+  //     setRemoved(false);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+  const handleOnDeleteBtn = () => {
+    setDeleteModal({ isShowDeleteModal: true, employeeId: employeeId });
   };
 
   return (
@@ -38,17 +43,17 @@ function DisplayCard({
               Edit
             </Button>
 
-            <Button variant="dark" onClick={() => setRemoved(true)}>
+            <Button variant="dark" onClick={handleOnDeleteBtn}>
               Remove
             </Button>
           </div>
         </div>
       </div>
-      <ConfirmationModal
+      {/* <ConfirmationModal
         isShow={isRemoved}
         handleOnCancel={() => setRemoved(false)}
         handleOnDelete={handleOnDelete}
-      />
+      /> */}
     </>
   );
 }
