@@ -27,7 +27,6 @@ function App() {
   const [isRemoved, setRemoved] = useState(false);
 
   useEffect(() => {
-    console.log("hihi");
     if (employeeList.length) {
       setEmployees(employeeList);
     } else {
@@ -57,13 +56,14 @@ function App() {
 
   const handleOnDelete = async () => {
     console.log(
-      "%cemployee id:",
+      "%cEmployee id:",
       "color:blue;font-size:15px;",
       selectedEmployeeId
     );
     try {
       await deleteEmployee(selectedEmployeeId);
       setRemoved(false);
+      await getAllEmployeeData();
     } catch (err) {
       console.log(err);
     }
