@@ -12,6 +12,7 @@ function DisplayCard({
   mobile,
   // isShowDeleteModal,
   setDeleteModal,
+  setEditModal,
 }) {
   // const [isRemoved, setRemoved] = useState(false);
 
@@ -28,6 +29,10 @@ function DisplayCard({
     setDeleteModal({ isShowDeleteModal: true, employeeId: employeeId });
   };
 
+  const handleOnEditBtn = () => {
+    setEditModal({ isShowEditModal: true, employeeId: employeeId });
+  };
+
   return (
     <>
       <div className="w-full border-l-4 border-indigo-500 divide-y divide-slate-700 my-8 shadow ">
@@ -39,7 +44,11 @@ function DisplayCard({
           <div className="col-span-2">{email}</div>
           <div className="col-span-1">{mobile}</div>
           <div className="flex justify-center gap-2 col-span-3">
-            <Button variant="secondary" className="px-6">
+            <Button
+              variant="secondary"
+              className="px-6"
+              onClick={handleOnEditBtn}
+            >
               Edit
             </Button>
 
@@ -49,11 +58,6 @@ function DisplayCard({
           </div>
         </div>
       </div>
-      {/* <ConfirmationModal
-        isShow={isRemoved}
-        handleOnCancel={() => setRemoved(false)}
-        handleOnDelete={handleOnDelete}
-      /> */}
     </>
   );
 }

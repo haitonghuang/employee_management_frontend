@@ -4,10 +4,11 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Alert from "react-bootstrap/Alert";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { findEmployeeById } from "../services/employeeService";
 
 const schema = yup.object().shape({
   fullName: yup.string().required("Name is a required field."),
@@ -17,13 +18,55 @@ const schema = yup.object().shape({
   phoneNumber: yup.string().required("Phone Number is required."),
 });
 
-export default function NewEmployeeModal({ show, handleClose, handleOnSave }) {
+export default function NewEmployeeModal({
+  show,
+  employeeId = undefined,
+  handleClose,
+  handleOnSave,
+  formLabel,
+}) {
+  // const [defaultEmployeeInfo, setDefaultEmployeeInfo] = useState({
+  //   fullName: "",
+  //   email: "",
+  //   title: "",
+  //   department: "",
+  //   phoneNumber: "",
+  // });
+  let defaultEmployeeInfo = employeeId ?? {
+    id: "",
+    fullName: "",
+    email: "",
+    title: "",
+    department: "",
+    phoneNumber: "",
+  };
+  // useEffect(() => {
+  //   async function getEmployeeById() {
+  //     console.log("rendering...");
+  //     if (employeeId) {
+  //       try {
+  //         const response = await findEmployeeById(employeeId);
+  //         const { id, ...rest } = response.data;
+  //         console.log(rest);
+  //         setDefaultEmployeeInfo(rest);
+  //         console.log(defaultEmployeeInfo);
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     }
+  //   }
+  //   getEmployeeById();
+  // }, [employeeId]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    values: defaultEmployeeInfo,
+  });
 
   const onSubmitHandler = async (newEmployee) => {
     console.log(newEmployee);
@@ -40,7 +83,7 @@ export default function NewEmployeeModal({ show, handleClose, handleOnSave }) {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Add New Employee</Modal.Title>
+          <Modal.Title>{formLabel}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

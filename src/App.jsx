@@ -4,10 +4,14 @@ import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import DisplayCard from "./components/DisplayCard";
-import NewEmployeeModal from "./components/NewEmployeeModal";
+import EmployeeInfoModal from "./components/EmployeeInfoModal";
 import { useFetchAllEmployee } from "./hooks/useFetchAllEmployee";
 import Spinner from "react-bootstrap/Spinner";
-import { addNewEmployee } from "./services/employeeService";
+import {
+  addNewEmployee,
+  findEmployeeById,
+  updateEmployeeRecord,
+} from "./services/employeeService";
 import SubmissionResultModal from "./components/SubmissionResultModal";
 import ConfirmationModal from "./components/ConfirmationModal";
 import { deleteEmployee } from "./services/employeeService";
@@ -25,6 +29,7 @@ function App() {
   const [employees, setEmployees] = useState([]);
 
   const [isRemoved, setRemoved] = useState(false);
+  const [isEdited, setEdited] = useState(false);
 
   useEffect(() => {
     if (employeeList.length) {
@@ -68,11 +73,42 @@ function App() {
       console.log(err);
     }
   };
-  const [selectedEmployeeId, setSelectedEmployeeId] = useState(0);
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState();
   const openDeleteModal = (data) => {
-    console.log(data);
+    // console.log(data);
     setRemoved(data.isShowDeleteModal);
     setSelectedEmployeeId(data.employeeId);
+  };
+
+  const [editedEmployee, setEditedEmployee] = useState(undefined);
+  const openEditModal = async (data) => {
+    // console.log("edited data", data);
+    setEdited(data.isShowEditModal);
+    // setSelectedEmployeeId(data.employeeId);
+    try {
+      const response = await findEmployeeById(data.employeeId);
+      // const { id, ...rest } = response.data;
+      // console.log(rest);
+      setEditedEmployee(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOnEdit = async (employee) => {
+    setEdited(false);
+    try {
+      console.log("edited employee_info:", employee);
+      const response = await updateEmployeeRecord(employee.id, employee);
+      console.log(response);
+      setShowSubmissionModal(true);
+      setModalTitle("Submission Received");
+      setModalDescription("You have successfully edited employee record");
+      setShow(false);
+      await getAllEmployeeData();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -90,10 +126,11 @@ function App() {
             <Button variant="primary" size="lg" onClick={handleShow}>
               + Create
             </Button>
-            <NewEmployeeModal
+            <EmployeeInfoModal
               show={show}
               handleClose={handleClose}
               handleOnSave={handleOnSave}
+              formLabel={"Add New Employee"}
             />
           </div>
         </div>
@@ -122,6 +159,7 @@ function App() {
                     email={employee.email}
                     mobile={employee.phoneNumber}
                     setDeleteModal={openDeleteModal}
+                    setEditModal={openEditModal}
                   />
                 ))
               )}
@@ -132,6 +170,13 @@ function App() {
           isShow={isRemoved}
           handleOnCancel={() => setRemoved(false)}
           handleOnDelete={handleOnDelete}
+        />
+        <EmployeeInfoModal
+          show={isEdited}
+          employeeId={editedEmployee}
+          handleClose={() => setEdited(false)}
+          handleOnSave={handleOnEdit}
+          formLabel={"Edit Employee Record"}
         />
       </div>
     </>
